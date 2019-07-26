@@ -7,8 +7,7 @@
 
     tasks:
       - name: check  server models
-        #shell: dmidecode -s system-product-name
-        shell: cat /Users/sabarishreddy/version.txt
+        shell: dmidecode -s system-product-name
         register: servermodel
 
       - debug:
@@ -16,12 +15,38 @@
 
       - name: Untar the files
         unarchive:
+          ## change source  ( put location of the tar file on bastion host)
           src: /Users/sabarishreddy/bios/r630_fwbin_2019.tar.gz
           dest: /tmp
         when: servermodel.stdout == "PowerEdge R630"
 
+      - name: Ensure target directory exists
+        file:
+          dest: "/tmp/r630_fwbin_2019"
+          state: directory
+        when: servermodel.stdout == "PowerEdge R630"
+
+      - name: updating the FC630
+        command: {{ item }} -q
+        with_fileglob:
+          - "/tmp/r630_fwbin_2019/*"
+        when: servermodel.stdout == "PowerEdge R630"
+
       - name: Untar the files
         unarchive:
+          ## change source ( put location of the tar file on bastion host)
           src: /Users/sabarishreddy/bios/fc630_fwbin_2019.tar.gz
           dest: /tmp
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: Ensure target directory exists
+        file:
+          dest: "/tmp/fc630_fwbin_2019"
+          state: directory
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: updating the FC630
+        command: {{ item }} -q
+        with_fileglob:
+          - "/tmp/r630_fwbin_2019/*"
         when: servermodel.stdout == "PowerEdge FC630"
