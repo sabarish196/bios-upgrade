@@ -1,2 +1,24 @@
 ---
-  
+  - name: upgrading bios idrac network and Sas firmware version for dell fc630 and r630 model
+    hosts: localhost
+    gather_facts: true
+    ignore_errors: no
+
+
+    tasks:
+      - name: check  server models
+        #shell: dmidecode -s system-product-name
+        shell: cat /Users/sabarishreddy/version.txt
+        register: servermodel
+
+      - name: Untar the files
+        unarchive:
+          src: /Users/sabarishreddy/bios/r630_fwbin_2019.tar.gz
+          dest: /tmp
+        when: servermodel.stdout == PowerEdge R630
+
+      - name: Untar the files
+        unarchive:
+          src: /Users/sabarishreddy/bios/fc630_fwbin_2019.tar.gz
+          dest: /tmp
+        when: servermodel.stdout == PowerEdge FC630
