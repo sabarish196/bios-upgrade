@@ -11,14 +11,17 @@
         shell: cat /Users/sabarishreddy/version.txt
         register: servermodel
 
+      - debug:
+          msg: Server model is "{{ servermodel.stdout }}"
+
       - name: Untar the files
         unarchive:
           src: /Users/sabarishreddy/bios/r630_fwbin_2019.tar.gz
           dest: /tmp
-        when: servermodel.stdout == PowerEdge R630
+        when: servermodel.stdout == "PowerEdge R630"
 
       - name: Untar the files
         unarchive:
           src: /Users/sabarishreddy/bios/fc630_fwbin_2019.tar.gz
           dest: /tmp
-        when: servermodel.stdout == PowerEdge FC630
+        when: servermodel.stdout == "PowerEdge FC630"

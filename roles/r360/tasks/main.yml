@@ -1,9 +1,0 @@
-- name: Ensure target directory exists
-  file:
-    dest: "/tmp/r630_fwbin_2019"
-    state: directory
-
-- name: updating the FC630
-  command: {{ item }} -q
-  with_fileglob:
-    - "/tmp/r630_fwbin_2019/*"
