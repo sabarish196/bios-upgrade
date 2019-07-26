@@ -1,6 +1,6 @@
 ---
   - name: upgrading bios idrac network and Sas firmware version for dell fc630 and r630 model
-    hosts: localhost
+    hosts: all
     gather_facts: true
     ignore_errors: no
 
