@@ -27,7 +27,7 @@
         when: servermodel.stdout == "PowerEdge R630"
 
       - name: updating the FC630
-        command: {{ item }} -q
+        command: ./{{ item }} -q
         with_fileglob:
           - "/tmp/r630_fwbin_2019/*"
         when: servermodel.stdout == "PowerEdge R630"
@@ -46,7 +46,7 @@
         when: servermodel.stdout == "PowerEdge FC630"
 
       - name: updating the FC630
-        command: {{ item }} -q
+        command: ./{{ item }} -q
         with_fileglob:
           - "/tmp/r630_fwbin_2019/*"
         when: servermodel.stdout == "PowerEdge FC630"
