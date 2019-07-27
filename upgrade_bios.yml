@@ -27,9 +27,23 @@
         when: servermodel.stdout == "PowerEdge R630"
 
       - name: updating the FC630
-        command: ./{{ item }} -q
-        with_fileglob:
-          - "/tmp/r630_fwbin_2019/*"
+        command: ./BIOS_2JFRF_LN_2.8.0.BIN -q
+        when: servermodel.stdout == "PowerEdge R630"
+
+      - name: updating the FC630
+        command: ./Firmware_HYPYY_LN_3.35_A00-00.BIN -q
+        when: servermodel.stdout == "PowerEdge R630"
+
+      - name: updating the FC630
+        command: ./iDRAC-with-Lifecycle-Controller_Firmware_CX8N2_LN_2.60.60.60_A00.BIN -q
+        when: servermodel.stdout == "PowerEdge R630"
+
+      - name: updating the FC630
+        command: ./Network_Firmware_3XJH0_LN_18.5.18_A00.BIN -q
+        when: servermodel.stdout == "PowerEdge R630"
+
+      - name: updating the FC630
+        command: ./SAS-RAID_Firmware_F675Y_LN_25.5.5.0005_A13.BIN -q
         when: servermodel.stdout == "PowerEdge R630"
 
       - name: Untar the files
@@ -46,7 +60,21 @@
         when: servermodel.stdout == "PowerEdge FC630"
 
       - name: updating the FC630
-        command: ./{{ item }} -q
-        with_fileglob:
-          - "/tmp/r630_fwbin_2019/*"
+        shell: ./BIOS_GV0FD_LN_2.8.0.BIN -q
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: updating the FC630
+        shell: ./Firmware_M2YKM_LN_3.31_A00-00_01.BIN -q
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: updating the FC630
+        shell: ./iDRAC-with-Lifecycle-Controller_Firmware_CX8N2_LN_2.60.60.60_A00.BIN -q
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: updating the FC630
+        shell: ./Network_Firmware_3XJH0_LN_18.5.18_A00.BIN -q
+        when: servermodel.stdout == "PowerEdge FC630"
+
+      - name: updating the FC630
+        shell: ./SAS-RAID_Firmware_F675Y_LN_25.5.5.0005_A13.BIN -q
         when: servermodel.stdout == "PowerEdge FC630"
