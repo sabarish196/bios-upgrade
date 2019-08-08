@@ -2,6 +2,8 @@
   - name: upgrading bios idrac network and Sas firmware version for dell fc630 and r630 model
     hosts: all
     gather_facts: true
+    become: yes
+    become_user: root
 
     tasks:
       - name: check  server models
@@ -13,9 +15,9 @@
 
       - name: Untar the files
         unarchive:
-          ## change source  ( put location of the tar file on bastion host)
-          src: /Users/sabarishreddy/bios/r630_fwbin_2019.tar.gz
+          src: /x/home/rayeddula/bios/r630_fwbin_2019.tar.gz
           dest: /tmp
+          owner: root
         when: servermodel.stdout == "PowerEdge R630"
 
       - name: Ensure target directory exists
@@ -24,31 +26,34 @@
           state: directory
         when: servermodel.stdout == "PowerEdge R630"
 
-      - name: updating the R630
-        command: ./tmp/r630_fwbin_2019/BIOS_2JFRF_LN_2.8.0.BIN -q
+      - name: Change file ownership, group and permissions
+        file:
+          path: /tmp/r630_fwbin_2019
+          state: directory
+          recurse: yes
+          owner: root
+          group: root
+          mode: '0755'
         when: servermodel.stdout == "PowerEdge R630"
 
-      - name: updating the R630
-        command: ./tmp/r630_fwbin_2019/Firmware_HYPYY_LN_3.35_A00-00.BIN -q
+      - name: Copy bios upgrade script
+        copy:
+          src: /tmp/install_bios_rc630.sh
+          dest: /tmp/install_bios_rc630.sh
+          owner: root
+          group: root
+          mode: '0755'
         when: servermodel.stdout == "PowerEdge R630"
 
-      - name: updating the R630
-        command: ./tmp/r630_fwbin_2019/iDRAC-with-Lifecycle-Controller_Firmware_CX8N2_LN_2.60.60.60_A00.BIN -q
-        when: servermodel.stdout == "PowerEdge R630"
-
-      - name: updating the R630
-        command: ./tmp/r630_fwbin_2019/Network_Firmware_3XJH0_LN_18.5.18_A00.BIN -q
-        when: servermodel.stdout == "PowerEdge R630"
-
-      - name: updating the R630
-        command: ./tmp/r630_fwbin_2019/SAS-RAID_Firmware_F675Y_LN_25.5.5.0005_A13.BIN -q
+      - name: run bios install
+        shell: "/tmp/install_bios_rc630.sh &>/dev/null &disown"
         when: servermodel.stdout == "PowerEdge R630"
 
       - name: Untar the files
         unarchive:
-          ## change source ( put location of the tar file on bastion host)
-          src: /Users/sabarishreddy/bios/fc630_fwbin_2019.tar.gz
+          src: /x/home/rayeddula/bios/fc630_fwbin_2019.tar.gz
           dest: /tmp
+          owner: root
         when: servermodel.stdout == "PowerEdge FC630"
 
       - name: Ensure target directory exists
@@ -57,22 +62,25 @@
           state: directory
         when: servermodel.stdout == "PowerEdge FC630"
 
-      - name: updating the FC630
-        shell: ./tmp/fc630_fwbin_2019/BIOS_GV0FD_LN_2.8.0.BIN -q
+      - name: Change file ownership, group and permissions
+        file:
+          path: /tmp/fc630_fwbin_2019
+          state: directory
+          recurse: yes
+          owner: root
+          group: root
+          mode: '0755'
         when: servermodel.stdout == "PowerEdge FC630"
 
-      - name: updating the FC630
-        shell: ./tmp/fc630_fwbin_2019/Firmware_M2YKM_LN_3.31_A00-00_01.BIN -q
+      - name: Copy bios upgrade script
+        copy:
+          src: /tmp/install_bios_fc630.sh
+          dest: /tmp/install_bios_fc630.sh
+          owner: root
+          group: root
+          mode: '0755'
         when: servermodel.stdout == "PowerEdge FC630"
 
-      - name: updating the FC630
-        shell: ./tmp/fc630_fwbin_2019/iDRAC-with-Lifecycle-Controller_Firmware_CX8N2_LN_2.60.60.60_A00.BIN -q
-        when: servermodel.stdout == "PowerEdge FC630"
-
-      - name: updating the FC630
-        shell: ./tmp/fc630_fwbin_2019/Network_Firmware_3XJH0_LN_18.5.18_A00.BIN -q
-        when: servermodel.stdout == "PowerEdge FC630"
-
-      - name: updating the FC630
-        shell: ./tmp/fc630_fwbin_2019/SAS-RAID_Firmware_F675Y_LN_25.5.5.0005_A13.BIN -q
+      - name: run bios install
+        shell: "/tmp/install_bios_fc630.sh &>/dev/null &disown"
         when: servermodel.stdout == "PowerEdge FC630"
